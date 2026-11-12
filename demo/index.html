@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Corner Cup (demo)</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#1d3a2c">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1d3a2c; --green-2: #2c5541; --cream: #f6f0e6; --paper: #fffdf9; --ink: #1c1a17;
+    --muted: #6f675d; --line: #e8dfd2; --accent: #d8714a; --accent-dark: #b85a37;
+    --r: 18px; --shadow: 0 10px 30px rgba(29,58,44,.10);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 120px; }
+  body { margin: 0; background: var(--cream); color: var(--ink); font: 16px/1.6 Inter, system-ui, -apple-system, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
+  img { display: block; max-width: 100%; }
+  a { color: inherit; }
+  .wrap { max-width: 72rem; margin: 0 auto; padding: 0 20px; }
+  .serif { font-family: Fraunces, Georgia, serif; }
+
+  /* demo notice */
+  .demo-bar { background: #fff1b8; color: #4a3b00; text-align: center; padding: .55rem 16px; font-size: .88rem; position: relative; z-index: 30; }
+  .demo-bar a { font-weight: 600; }
+
+  /* header */
+  .top { position: absolute; left: 0; right: 0; z-index: 20; }
+  .top .wrap { display: flex; align-items: center; justify-content: space-between; height: 76px; }
+  .logo { display: flex; align-items: center; gap: .6rem; color: #fff; text-decoration: none; font: 700 1.35rem Fraunces, Georgia, serif; letter-spacing: -.01em; }
+  .logo-dot { width: 34px; height: 34px; border-radius: 50%; background: var(--accent); display: grid; place-items: center; }
+  .top nav { display: flex; gap: 1.6rem; align-items: center; }
+  .top nav a { color: rgba(255,255,255,.88); text-decoration: none; font-weight: 500; font-size: .95rem; }
+  .top nav a:hover { color: #fff; }
+  .pill { display: inline-flex; align-items: center; gap: .45rem; padding: .7rem 1.25rem; border-radius: 999px; font-weight: 600; text-decoration: none; border: 0; cursor: pointer; font-size: .95rem; transition: transform .15s, background .15s; }
+  .pill:hover { transform: translateY(-1px); }
+  .pill.primary { background: var(--accent); color: #fff; }
+  .pill.primary:hover { background: var(--accent-dark); }
+  .pill.light { background: rgba(255,255,255,.14); color: #fff; backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,.35); }
+  .pill.dark { background: var(--green); color: #fff; }
+
+  /* hero */
+  .hero { position: relative; min-height: min(86vh, 760px); display: flex; align-items: flex-end; color: #fff; overflow: hidden; }
+  .hero > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 60% 40%; }
+  .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,20,15,.55) 0%, rgba(10,20,15,.15) 35%, rgba(10,20,15,.85) 100%); }
+  .hero .wrap { position: relative; z-index: 2; padding-bottom: 4.5rem; width: 100%; }
+  .status { display: inline-flex; align-items: center; gap: .5rem; background: rgba(255,255,255,.15); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,.3); padding: .35rem .85rem; border-radius: 999px; font-size: .85rem; font-weight: 500; }
+  .status i { width: 8px; height: 8px; border-radius: 50%; background: #9aa39e; }
+  .status.open i { background: #5ee08f; box-shadow: 0 0 0 4px rgba(94,224,143,.25); }
+  .hero h1 { font: 700 clamp(2.8rem, 8vw, 5.6rem)/1 Fraunces, Georgia, serif; letter-spacing: -.02em; margin: 1rem 0 .9rem; max-width: 12ch; }
+  .hero h1 em { font-style: italic; font-weight: 500; color: #ffd2bd; padding-right: .12em; }
+  .hero p.lead { font-size: 1.15rem; max-width: 34rem; color: rgba(255,255,255,.88); margin: 0 0 1.6rem; }
+  .hero .ctas { display: flex; gap: .7rem; flex-wrap: wrap; }
+  .facts { display: flex; gap: 1.6rem; flex-wrap: wrap; margin-top: 2rem; font-size: .9rem; color: rgba(255,255,255,.8); }
+  .facts span { display: inline-flex; align-items: center; gap: .45rem; }
+
+  /* category tabs */
+  .tabs { position: sticky; top: 0; z-index: 15; background: rgba(246,240,230,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+  .tabs .wrap { display: flex; gap: .5rem; overflow-x: auto; padding-top: .8rem; padding-bottom: .8rem; scrollbar-width: none; }
+  .tabs .wrap::-webkit-scrollbar { display: none; }
+  .tabs a { flex: none; padding: .5rem 1.05rem; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: .92rem; color: var(--green); background: var(--paper); border: 1px solid var(--line); }
+  .tabs a.on { background: var(--green); color: #fff; border-color: var(--green); }
+
+  /* sections */
+  section { padding: 4.5rem 0 1rem; }
+  .eyebrow { text-transform: uppercase; letter-spacing: .14em; font-size: .78rem; font-weight: 700; color: var(--accent-dark); margin: 0 0 .5rem; }
+  h2 { font: 700 clamp(2rem, 4.5vw, 2.8rem)/1.05 Fraunces, Georgia, serif; letter-spacing: -.015em; margin: 0 0 .6rem; color: var(--green); }
+  .sub { color: var(--muted); margin: 0 0 2rem; max-width: 38rem; }
+
+  /* favourites carousel */
+  .rail { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(260px, 1fr); gap: 1.1rem; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 1rem; scrollbar-width: thin; }
+  .fav { scroll-snap-align: start; position: relative; border-radius: var(--r); overflow: hidden; aspect-ratio: 4/5; color: #fff; text-decoration: none; box-shadow: var(--shadow); }
+  .fav img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; }
+  .fav:hover img { transform: scale(1.05); }
+  .fav::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 45%, rgba(0,0,0,.75)); }
+  .fav div { position: absolute; left: 1.1rem; right: 1.1rem; bottom: 1rem; z-index: 2; }
+  .fav h3 { font: 700 1.35rem Fraunces, Georgia, serif; margin: 0; }
+  .fav span { font-size: .9rem; opacity: .9; }
+  .badge { position: absolute; top: .9rem; left: .9rem; z-index: 2; background: var(--paper); color: var(--green); font-size: .75rem; font-weight: 700; padding: .3rem .65rem; border-radius: 999px; }
+
+  /* menu */
+  .menu-grid { display: grid; gap: 1.1rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); }
+  .dish { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; display: flex; flex-direction: column; transition: box-shadow .2s, transform .2s; }
+  .dish:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+  .dish img { aspect-ratio: 16/10; object-fit: cover; width: 100%; }
+  .dish .body { padding: 1.1rem 1.2rem 1.2rem; display: flex; flex-direction: column; flex: 1; }
+  .dish .row { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+  .dish h3 { margin: 0; font-size: 1.08rem; font-weight: 700; }
+  .price { font: 700 1.1rem Fraunces, Georgia, serif; color: var(--green); white-space: nowrap; }
+  .dish p { margin: .35rem 0 .8rem; color: var(--muted); font-size: .93rem; }
+  .dish .foot { margin-top: auto; display: flex; justify-content: space-between; align-items: center; gap: .5rem; }
+  .tags { display: flex; gap: .35rem; flex-wrap: wrap; }
+  .tag { font-size: .72rem; font-weight: 700; padding: .2rem .5rem; border-radius: 6px; background: #e7f0e9; color: var(--green-2); }
+  .tag.gf { background: #fbecd9; color: #8a5a17; }
+  .add { width: 36px; height: 36px; border-radius: 50%; border: 0; background: var(--green); color: #fff; font-size: 1.3rem; line-height: 1; cursor: pointer; flex: none; }
+  .add:hover { background: var(--accent); }
+
+  .list { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding: .4rem 1.3rem; margin-top: 1.1rem; }
+  .list li { list-style: none; display: grid; grid-template-columns: 1fr auto; gap: .2rem 1rem; padding: .95rem 0; border-bottom: 1px solid var(--line); }
+  .list li:last-child { border-bottom: 0; }
+  .list ul { margin: 0; padding: 0; }
+  .list b { font-weight: 600; }
+  .list small { grid-column: 1; color: var(--muted); font-size: .9rem; }
+  .list .price { grid-row: 1; grid-column: 2; }
+
+  .coffee { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; align-items: stretch; }
+  .coffee .photo { border-radius: var(--r); overflow: hidden; min-height: 280px; }
+  .coffee .photo img { width: 100%; height: 100%; object-fit: cover; }
+  .coffee .list { margin-top: 0; }
+  .legend { margin-top: 1.4rem; font-size: .85rem; color: var(--muted); display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
+
+  /* order band */
+  .band { margin: 4.5rem 0 0; background: var(--green); color: #fff; border-radius: 28px; padding: clamp(2rem, 5vw, 3.5rem); display: grid; grid-template-columns: 1.3fr 1fr; gap: 2rem; align-items: center; position: relative; overflow: hidden; }
+  .band::before { content: ""; position: absolute; width: 380px; height: 380px; border-radius: 50%; background: var(--green-2); right: -120px; top: -160px; }
+  .band > * { position: relative; }
+  .band h2 { color: #fff; }
+  .band p { color: rgba(255,255,255,.82); margin: 0 0 1.4rem; }
+  .steps { display: grid; gap: .8rem; }
+  .steps div { display: flex; gap: .9rem; align-items: center; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); padding: .9rem 1rem; border-radius: 14px; }
+  .steps b { width: 30px; height: 30px; flex: none; border-radius: 50%; background: var(--accent); display: grid; place-items: center; font-size: .9rem; }
+
+  /* visit */
+  .visit { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+  .card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding: 1.5rem; }
+  .card h3 { font: 700 1.3rem Fraunces, Georgia, serif; margin: 0 0 1rem; color: var(--green); }
+  .hours { width: 100%; border-collapse: collapse; }
+  .hours td { padding: .7rem .4rem; border-bottom: 1px solid var(--line); }
+  .hours td:last-child { text-align: right; font-weight: 500; }
+  .hours tr:last-child td { border-bottom: 0; }
+  .hours tr.today td { color: var(--green); font-weight: 700; }
+  .hours tr.today td:first-child::after { content: "Today"; margin-left: .5rem; font-size: .7rem; background: var(--accent); color: #fff; padding: .15rem .45rem; border-radius: 999px; vertical-align: middle; }
+  .map { border-radius: 14px; overflow: hidden; border: 1px solid var(--line); height: 220px; margin-bottom: 1rem; }
+  .map iframe { width: 100%; height: 100%; border: 0; filter: saturate(.8); }
+  .contact-lines { display: grid; gap: .55rem; }
+  .contact-lines div { display: flex; gap: .7rem; align-items: center; }
+  .ico { width: 34px; height: 34px; border-radius: 10px; background: #e7f0e9; display: grid; place-items: center; flex: none; }
+
+  .gallery { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 1.1rem; margin-top: 1.1rem; }
+  .gallery img { border-radius: var(--r); width: 100%; height: 260px; object-fit: cover; }
+
+  footer { margin-top: 4.5rem; background: var(--ink); color: rgba(255,255,255,.7); padding: 3rem 0 6rem; font-size: .9rem; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+  footer .logo { margin-bottom: .6rem; }
+  footer .social { display: flex; gap: .6rem; }
+  footer .social a { width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(255,255,255,.25); display: grid; place-items: center; }
+  .credits { font-size: .78rem; color: rgba(255,255,255,.45); margin-top: 1rem; }
+
+  /* mobile order bar */
+  .order-bar { display: none; }
+
+  @media (max-width: 760px) {
+    .top nav a:not(.pill) { display: none; }
+    .coffee, .band, .visit { grid-template-columns: 1fr; }
+    .dish { flex-direction: row-reverse; align-items: stretch; }
+    .dish img { width: 118px; aspect-ratio: auto; flex: none; object-fit: cover; }
+    .dish .body { padding: .9rem 1rem; }
+    .dish p { font-size: .88rem; margin: .25rem 0 .6rem; }
+    .dish .row { flex-direction: column; gap: 0; }
+    .gallery { grid-template-columns: 1fr 1fr; }
+    .gallery img:first-child { grid-column: 1 / -1; }
+    .gallery img { height: 180px; }
+    .order-bar { display: flex; position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 40; justify-content: space-between; align-items: center; background: var(--green); color: #fff; border-radius: 999px; padding: .55rem .55rem .55rem 1.2rem; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+    .order-bar small { display: block; opacity: .75; font-size: .75rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+
+<div class="demo-bar"><strong>Demo only.</strong> The Corner Cup is an invented cafe. Menu, prices, address and details are made up; photos are stock.
+  <a href="../index.html">Back to Calvin Hanasy</a></div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#"><span class="logo-dot"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M17 10h1.5a2.5 2.5 0 0 1 0 5H17M8 3v2M12 3v2"/></svg></span>The Corner Cup</a>
+    <nav>
+      <a href="#menu">Menu</a>
+      <a href="#visit">Hours &amp; map</a>
+      <a class="pill primary" href="#order">Order pickup</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <img src="img/hero.jpg" alt="Barista pouring latte art">
+  <div class="wrap">
+    <span class="status" id="status"><i></i><span>Mon–Fri 6am–2:30pm</span></span>
+    <h1>Good coffee. <em>Proper</em> brekky.</h1>
+    <p class="lead">A neighbourhood cafe in Cleveland. Breakfast all day, lunch from 11, and coffee you can order ahead and skip the queue.</p>
+    <div class="ctas">
+      <a class="pill primary" href="#order">Order for pickup →</a>
+      <a class="pill light" href="#menu">See the menu</a>
+    </div>
+    <div class="facts">
+      <span>☕ Dine in &amp; takeaway</span>
+      <span>🌱 Vegan &amp; GF options</span>
+      <span>🐾 Dog-friendly outdoor seats</span>
+    </div>
+  </div>
+</div>
+
+<nav class="tabs" aria-label="Menu sections">
+  <div class="wrap">
+    <a href="#favourites" class="on">Favourites</a>
+    <a href="#breakfast">Breakfast</a>
+    <a href="#lunch">Lunch</a>
+    <a href="#coffee">Coffee &amp; drinks</a>
+    <a href="#visit">Hours &amp; map</a>
+  </div>
+</nav>
+
+<main class="wrap" id="menu">
+
+  <section id="favourites">
+    <p class="eyebrow">Locals' picks</p>
+    <h2>House favourites</h2>
+    <p class="sub">What most people come back for. Swipe for more.</p>
+    <div class="rail">
+      <a class="fav" href="#breakfast"><span class="badge">Most ordered</span><img src="img/halloumi.jpg" alt="Halloumi stack with poached egg" loading="lazy"><div><h3>Halloumi stack</h3><span>$21 · Breakfast</span></div></a>
+      <a class="fav" href="#lunch"><img src="img/tacos.jpg" alt="Fish tacos" loading="lazy"><div><h3>Fish tacos</h3><span>$19 · Lunch</span></div></a>
+      <a class="fav" href="#breakfast"><img src="img/avo.jpg" alt="Smashed avocado with poached eggs" loading="lazy"><div><h3>Smashed avo</h3><span>$17 · Breakfast</span></div></a>
+      <a class="fav" href="#lunch"><img src="img/caesar.jpg" alt="Chicken caesar salad" loading="lazy"><div><h3>Chicken caesar</h3><span>$20 · Lunch</span></div></a>
+    </div>
+  </section>
+
+  <section id="breakfast">
+    <p class="eyebrow">Served all day</p>
+    <h2>Breakfast</h2>
+    <p class="sub">Sourdough from a local bakery. Gluten-free bread available on everything, +$2.</p>
+    <div class="menu-grid">
+      <article class="dish"><img src="img/avo.jpg" alt="Smashed avocado on sourdough with poached eggs" loading="lazy"><div class="body">
+        <div class="row"><h3>Smashed avo</h3><span class="price">$17</span></div>
+        <p>Sourdough, feta, lemon, chilli and dukkah. Add a poached egg +$3.</p>
+        <div class="foot"><div class="tags"><span class="tag">V</span><span class="tag gf">GF option</span></div><button class="add" aria-label="Add smashed avo">+</button></div></div></article>
+      <article class="dish"><img src="img/halloumi.jpg" alt="Halloumi stack" loading="lazy"><div class="body">
+        <div class="row"><h3>Halloumi stack</h3><span class="price">$21</span></div>
+        <p>Grilled halloumi, avocado, poached egg and chilli jam on toasted sourdough.</p>
+        <div class="foot"><div class="tags"><span class="tag">V</span></div><button class="add" aria-label="Add halloumi stack">+</button></div></div></article>
+      <article class="dish"><img src="img/breakfast.jpg" alt="Big breakfast plate with eggs and bacon" loading="lazy"><div class="body">
+        <div class="row"><h3>Big breakfast</h3><span class="price">$24</span></div>
+        <p>Two eggs your way, bacon, sausage, mushrooms, roast tomato and toast.</p>
+        <div class="foot"><div class="tags"><span class="tag gf">GF option</span></div><button class="add" aria-label="Add big breakfast">+</button></div></div></article>
+    </div>
+    <div class="list"><ul>
+      <li><b>Bircher muesli</b><span class="price">$14</span><small>Apple, coconut yoghurt, berries, toasted seeds · VG, GF</small></li>
+      <li><b>Eggs on toast</b><span class="price">$12</span><small>Poached, fried or scrambled on sourdough · V</small></li>
+      <li><b>Banana bread</b><span class="price">$8</span><small>Toasted, with whipped butter · V</small></li>
+    </ul></div>
+  </section>
+
+  <section id="lunch">
+    <p class="eyebrow">From 11am</p>
+    <h2>Lunch</h2>
+    <p class="sub">Fresh, quick and made to take away if you're on the run.</p>
+    <div class="menu-grid">
+      <article class="dish"><img src="img/tacos.jpg" alt="Fish tacos" loading="lazy"><div class="body">
+        <div class="row"><h3>Fish tacos (2)</h3><span class="price">$19</span></div>
+        <p>Beer-battered fish, pickled onion, slaw, lime crema, soft tortillas.</p>
+        <div class="foot"><div class="tags"></div><button class="add" aria-label="Add fish tacos">+</button></div></div></article>
+      <article class="dish"><img src="img/caesar.jpg" alt="Chicken caesar salad" loading="lazy"><div class="body">
+        <div class="row"><h3>Chicken caesar</h3><span class="price">$20</span></div>
+        <p>Grilled chicken, kale and cos, parmesan crisps, croutons, house dressing.</p>
+        <div class="foot"><div class="tags"><span class="tag gf">GF option</span></div><button class="add" aria-label="Add chicken caesar">+</button></div></div></article>
+    </div>
+    <div class="list"><ul>
+      <li><b>Pumpkin &amp; feta salad</b><span class="price">$18</span><small>Rocket, pepitas, balsamic · V, GF</small></li>
+      <li><b>Ham, cheese &amp; tomato toastie</b><span class="price">$12</span><small>Add a side of chips +$5</small></li>
+      <li><b>Chips</b><span class="price">$8</span><small>Rosemary salt, aioli · VG</small></li>
+    </ul></div>
+  </section>
+
+  <section id="coffee">
+    <p class="eyebrow">Order ahead, skip the queue</p>
+    <h2>Coffee &amp; drinks</h2>
+    <p class="sub">House blend from a local roaster. Oat, almond, soy or lactose-free +60c.</p>
+    <div class="coffee">
+      <div class="photo"><img src="img/flatwhite.jpg" alt="Flat white with latte art" loading="lazy"></div>
+      <div class="list"><ul>
+        <li><b>Flat white · Latte · Cappuccino</b><span class="price">$5 / $6</span><small>Regular / large</small></li>
+        <li><b>Long black · Espresso</b><span class="price">$4.50</span><small>Double shot</small></li>
+        <li><b>Iced latte</b><span class="price">$7</span><small>Add vanilla or caramel +80c</small></li>
+        <li><b>Chai latte</b><span class="price">$5.50</span><small>Sticky chai, steeped to order</small></li>
+        <li><b>Fresh juice</b><span class="price">$8</span><small>Orange, or apple, ginger &amp; mint</small></li>
+      </ul></div>
+    </div>
+    <p class="legend"><span class="tag">V</span> Vegetarian <span class="tag">VG</span> Vegan <span class="tag gf">GF</span> Gluten-free. Please tell us about allergies when you order.</p>
+  </section>
+
+  <div class="band" id="order">
+    <div>
+      <p class="eyebrow" style="color:#ffc4a8">Pickup ordering</p>
+      <h2>Order ahead in under a minute.</h2>
+      <p>On a real site, this button opens the cafe's own online ordering page. Orders go straight to the cafe, with no delivery-app commission.</p>
+      <a class="pill primary" href="#order">Start an order (demo) →</a>
+    </div>
+    <div class="steps">
+      <div><b>1</b>Pick your food and coffee</div>
+      <div><b>2</b>Choose a pickup time</div>
+      <div><b>3</b>Pay online and walk straight in</div>
+    </div>
+  </div>
+
+  <section id="visit">
+    <p class="eyebrow">Come say hi</p>
+    <h2>Hours &amp; location</h2>
+    <p class="sub">These hours match the Google listing, so customers see the same thing everywhere.</p>
+    <div class="visit">
+      <div class="card">
+        <h3>Opening hours</h3>
+        <table class="hours" id="hours">
+          <tr data-d="1"><td>Monday</td><td>6:00am – 2:30pm</td></tr>
+          <tr data-d="2"><td>Tuesday</td><td>6:00am – 2:30pm</td></tr>
+          <tr data-d="3"><td>Wednesday</td><td>6:00am – 2:30pm</td></tr>
+          <tr data-d="4"><td>Thursday</td><td>6:00am – 2:30pm</td></tr>
+          <tr data-d="5"><td>Friday</td><td>6:00am – 2:30pm</td></tr>
+          <tr data-d="6"><td>Saturday</td><td>7:00am – 1:30pm</td></tr>
+          <tr data-d="0"><td>Sunday</td><td>7:00am – 1:30pm</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h3>Find us</h3>
+        <div class="map"><iframe title="Map of Cleveland, Queensland" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=153.258%2C-27.532%2C153.275%2C-27.520&amp;layer=mapnik"></iframe></div>
+        <div class="contact-lines">
+          <div><span class="ico">📍</span>1 Example Street, Cleveland QLD 4163 (invented)</div>
+          <div><span class="ico">✉️</span>hello@thecornercup.example</div>
+          <div><span class="ico">🅿️</span>Free street parking out front</div>
+        </div>
+      </div>
+    </div>
+    <div class="gallery">
+      <img src="img/interior.jpg" alt="Inside a bright cafe" loading="lazy" style="object-position:center 60%">
+      <img src="img/flatwhite.jpg" alt="Flat white" loading="lazy">
+      <img src="img/breakfast.jpg" alt="Breakfast plate" loading="lazy">
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <a class="logo" href="#"><span class="logo-dot"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M17 10h1.5a2.5 2.5 0 0 1 0 5H17M8 3v2M12 3v2"/></svg></span>The Corner Cup</a>
+      <div>An invented cafe. Demo built by Calvin Hanasy.</div>
+      <p class="credits">Stock photos from <a href="https://unsplash.com">Unsplash</a> (Unsplash Licence). Map © OpenStreetMap contributors.</p>
+    </div>
+    <div class="social" aria-label="Social links (demo)">
+      <a href="#" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+      <a href="#" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M14 8h3V4h-3a4 4 0 0 0-4 4v2H8v4h2v8h4v-8h3l1-4h-4V8z"/></svg></a>
+    </div>
+  </div>
+</footer>
+
+<div class="order-bar">
+  <div><b>Order for pickup</b><small id="bar-status">Skip the queue</small></div>
+  <a class="pill primary" href="#order">Order →</a>
+</div>
+
+<script>
+  // Open-now badge and today's hours, from the visitor's clock.
+  (function () {
+    var hours = { 0: [7, 13.5], 1: [6, 14.5], 2: [6, 14.5], 3: [6, 14.5], 4: [6, 14.5], 5: [6, 14.5], 6: [7, 13.5] };
+    var now = new Date(), d = now.getDay(), t = now.getHours() + now.getMinutes() / 60, h = hours[d];
+    var fmt = function (x) { var hr = Math.floor(x), m = Math.round((x - hr) * 60); return (hr > 12 ? hr - 12 : hr) + (m ? ':' + String(m).padStart(2, '0') : '') + (hr >= 12 ? 'pm' : 'am'); };
+    var open = t >= h[0] && t < h[1];
+    var text = open ? 'Open now · until ' + fmt(h[1]) : (t < h[0] ? 'Closed · opens ' + fmt(h[0]) + ' today' : 'Closed · opens ' + fmt(hours[(d + 1) % 7][0]) + ' tomorrow');
+    var s = document.getElementById('status');
+    s.classList.toggle('open', open); s.lastElementChild.textContent = text;
+    document.getElementById('bar-status').textContent = text;
+    var row = document.querySelector('#hours tr[data-d="' + d + '"]'); if (row) row.className = 'today';
+  })();
+  // Highlight the menu tab for the section in view.
+  (function () {
+    var links = document.querySelectorAll('.tabs a');
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        links.forEach(function (a) {
+          var on = a.getAttribute('href') === '#' + e.target.id;
+          a.classList.toggle('on', on);
+          if (on && a.scrollIntoView) a.parentNode.scrollTo({ left: a.offsetLeft - 20, behavior: 'smooth' });
+        });
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    ['favourites', 'breakfast', 'lunch', 'coffee', 'visit'].forEach(function (id) { io.observe(document.getElementById(id)); });
+  })();
+  // Demo add buttons.
+  document.querySelectorAll('.add').forEach(function (b) {
+    b.addEventListener('click', function () { b.textContent = '✓'; setTimeout(function () { b.textContent = '+'; }, 1200); });
+  });
+</script>
+</body>
+</html>

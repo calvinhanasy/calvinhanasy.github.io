@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calvin Hanasy: offer sheet</title>
+<style>
+  @page { size: A4; margin: 14mm; }
+  :root { --text: #2b2420; --muted: #6b5f57; --accent: #c2502b; --line: #e7ded3; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #fff; color: var(--text); font: 10.5pt/1.45 system-ui, "Segoe UI", Roboto, sans-serif; }
+  .page { max-width: 182mm; margin: 0 auto; padding: 16px; }
+  header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--accent); padding-bottom: 6pt; }
+  .brand { display: flex; align-items: center; gap: 8pt; font: 700 19pt Georgia, serif; }
+  .where { color: var(--muted); }
+  h1 { font-size: 17pt; line-height: 1.2; margin: 9pt 0 4pt; }
+  h2 { font-size: 12pt; margin: 9pt 0 4pt; color: var(--accent); }
+  p { margin: 0 0 5pt; }
+  .lead { color: var(--muted); font-size: 11pt; }
+  table { width: 100%; border-collapse: collapse; }
+  td { padding: 4pt 4pt; border-bottom: 1px solid var(--line); vertical-align: top; }
+  td.price { white-space: nowrap; font-weight: 700; text-align: right; width: 26mm; }
+  td b { display: block; }
+  .muted { color: var(--muted); }
+  .box { border: 2px solid var(--accent); border-radius: 8pt; padding: 8pt 10pt; margin-top: 10pt; }
+  .fill { display: inline-block; min-width: 22mm; border-bottom: 1px solid var(--text); }
+  ol { margin: 0; padding-left: 14pt; }
+  li { margin-bottom: 2pt; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14pt; }
+  .contact { margin-top: 12pt; padding-top: 8pt; border-top: 1px solid var(--line); font-size: 11.5pt; }
+  .small { font-size: 8pt; color: var(--muted); margin-top: 8pt; }
+  .print-tip { background: #fff4d6; padding: 8px 12px; margin-bottom: 12px; font-size: 13px; }
+  @media print { .print-tip { display: none; } .page { padding: 0; } }
+  @media (max-width: 40rem) { .cols { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <p class="print-tip">To print: Ctrl+P, paper A4, margins Default, turn off "Headers and footers". This note won't print.</p>
+
+  <header>
+    <span class="brand"><img src="img/logo-mark.svg" alt="" style="height:13mm">Calvin Hanasy</span>
+    <span class="where">Cleveland &amp; Redlands Coast</span>
+  </header>
+
+  <h1>Your cafe, easy to find and easy to order from online.</h1>
+  <p class="lead">I set up the online side for independent cafes, takeaways and restaurants: your Google listing, a simple menu
+    website, and pickup or delivery ordering. You keep running the shop. I've managed a busy food business myself.</p>
+
+  <h2>Prices</h2>
+  <table>
+    <tr><td><b>Starter setup</b><span class="muted">Google Business Profile fixed up (hours, menu, photos, categories, ordering link),
+      one-page menu website, review-reply templates. You own everything and get every login.</span></td><td class="price">A$249 once</td></tr>
+    <tr><td><b>Care plan</b><span class="muted">Menu, price and hours changes on your site and Google, holiday hours, draft review
+      replies for you to approve. Optional, cancel any time.</span></td><td class="price">A$49 / month</td></tr>
+    <tr><td><b>Pickup ordering</b><span class="muted">Online pickup ordering on your own account, linked from your site and Google.
+      Orders come straight to you.</span></td><td class="price">A$149 once</td></tr>
+    <tr><td><b>Delivery app setup</b><span class="muted">Uber Eats or DoorDash menu with photos, and help setting delivery prices that
+      cover the commission.</span></td><td class="price">A$149 per app</td></tr>
+  </table>
+  <p class="muted" style="margin-top:4pt">Extras quoted per job: menu photos, QR code menus, printed menus and flyers, Instagram and
+    Facebook setup, gift cards, specials and event pages. Software, card and platform fees are paid by you directly; I take no cut of your orders.</p>
+
+  <div class="cols">
+    <div class="box">
+      <strong>Does it pay for itself? Your numbers:</strong>
+      <p style="margin-top:5pt">Profit on an average order: $<span class="fill"></span></p>
+      <p>A$249 ÷ that = <span class="fill"></span> extra orders, once.</p>
+      <p class="muted">Example: $10 profit per order means about 25 extra orders. I can't promise extra orders.</p>
+    </div>
+    <div class="box">
+      <strong>Why a complete Google listing matters</strong>
+      <p style="margin-top:5pt">Google says customers are <strong>2.7 times</strong> more likely to consider a business reputable if they
+        find a complete Business Profile on Google Search and Maps.</p>
+      <p class="muted">Source: Google Business Profile Help, support.google.com/business/answer/10515606</p>
+    </div>
+  </div>
+
+  <h2>How it works</h2>
+  <ol>
+    <li><strong>Free check.</strong> I look at your Google listing and online presence and tell you what I'd fix. No obligation.</li>
+    <li><strong>Quote.</strong> A fixed price in writing before anything starts.</li>
+    <li><strong>Setup.</strong> About 20 minutes with you for menu, photos and logins. I do the rest within a week.</li>
+    <li><strong>Handover.</strong> I show you everything and hand over all logins.</li>
+  </ol>
+
+  <div class="contact">
+    <strong>Ask for your free check:</strong> calvin.baysidemenu@outlook.com · or catch me in person at a quiet time.<br>
+    See an example menu site: [[SITE_URL]]/demo/
+  </div>
+
+  <p class="small">Calvin Hanasy · ABN [[ABN]] · Not affiliated with Google, Uber Eats, DoorDash or Square. Names are used only to describe the services I set up.</p>
+</div>
+</body>
+</html>
